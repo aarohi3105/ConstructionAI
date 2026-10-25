@@ -38,10 +38,18 @@ inject_css()
 # SIDEBAR
 # ========================================================================
 
+
 def render_sidebar() -> GeminiClient:
-    """Render the sidebar and return an initialized GeminiClient."""
+    """Render sidebar and initialize GeminiClient."""
+
+    # Read the API key from Streamlit Cloud Secrets.
+    # If running locally without secrets, fall back to demo mode.
+    try:
+        api_key = st.secrets.get("GEMINI_API_KEY", None)
+    except Exception:
+        api_key = None
+
     with st.sidebar:
-        # Logo & Title
         st.markdown("""
         <div style="text-align:center;padding:1rem 0 1.5rem;">
             <div style="font-size:3rem;">🏗️</div>
@@ -60,30 +68,12 @@ def render_sidebar() -> GeminiClient:
 
         st.markdown("---")
 
-        # API Key section
-        st.markdown("### 🔑 API Configuration")
-        api_key = st.text_input(
-            "Google Gemini API Key",
-            type="password",
-            placeholder="Enter your Gemini API key...",
-            help="Get your key at: https://aistudio.google.com/app/apikey",
-            key="gemini_api_key"
-        )
-
+        # No API key input field is shown.
+        st.markdown("### 🏗️ Construction Intelligence")
         if api_key:
-            st.markdown("""
-            <div style="background:rgba(39,174,96,0.1);border:1px solid #27AE60;
-                        border-radius:8px;padding:0.5rem 0.75rem;font-size:0.8rem;
-                        color:#2ECC71;margin-top:0.5rem;">
-                ✅ API Key loaded — AI mode active
-            </div>""", unsafe_allow_html=True)
+            st.success("AI services configured")
         else:
-            st.markdown("""
-            <div style="background:rgba(243,156,18,0.1);border:1px solid #F39C12;
-                        border-radius:8px;padding:0.5rem 0.75rem;font-size:0.8rem;
-                        color:#F39C12;margin-top:0.5rem;">
-                ⚡ Demo mode active — Add API key for real AI analysis
-            </div>""", unsafe_allow_html=True)
+            st.info("Demo mode")
 
         st.markdown("---")
 
@@ -91,7 +81,7 @@ def render_sidebar() -> GeminiClient:
         st.markdown("### 🏛️ Architecture Overview")
         arch_items = [
             ("Frontend", "Streamlit + Custom CSS"),
-            ("AI Engine", "Google Gemini 1.5 Flash"),
+            ("AI Engine", "Google Gemini"),
             ("Vision", "Multimodal Image Analysis"),
             ("Rendering", "Pollinations AI (Flux)"),
             ("Standards", "OSHA 1926 · IS 456 · ACI 224R"),
@@ -131,7 +121,6 @@ def render_sidebar() -> GeminiClient:
 
         st.markdown("---")
 
-        # Platform Info
         st.markdown("""
         <div style="font-size:0.7rem;color:#8892A4;text-align:center;padding:0.5rem 0;">
             Platform ID: <code>6ac4c98d1dcde6d7857c1642</code><br>
@@ -140,7 +129,9 @@ def render_sidebar() -> GeminiClient:
         </div>
         """, unsafe_allow_html=True)
 
-    return GeminiClient(api_key=api_key if api_key else None)
+    return GeminiClient(api_key=api_key)
+
+  
 
 
 # ========================================================================

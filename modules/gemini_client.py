@@ -242,7 +242,9 @@ Return ONLY valid JSON:
     def chat(self, messages: list, user_message: str) -> str:
         if self.demo_mode:
             return (
-                "🤖 **Demo Mode Active** — Connect your Gemini API key in the sidebar for real AI responses.\n\n"
+                # "🤖 **Demo Mode Active** — Connect your Gemini API key in the sidebar for real AI responses.\n\n"
+                 "🤖 **Demo Mode Active** — AI is currently unavailable. "
+        "Please try again later.\n\n"
                 "In production, I would answer construction engineering queries including:\n"
                 "- Structural load calculations and safety factors\n"
                 "- IS 456 / OSHA compliance guidance\n"
